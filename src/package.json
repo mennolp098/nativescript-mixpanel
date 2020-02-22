@@ -1,8 +1,8 @@
 {
-    "name": "nativescript-mixpanel",
-    "version": "2.0.3",
+    "name": "@nstudio/nativescript-mixpanel",
+    "version": "0.1.0",
     "description": "Mixpanel tracking",
-    "main": "mixpanel",
+    "main": "mixpanel.js",
     "typings": "index.d.ts",
     "nativescript": {
         "platforms": {
@@ -47,13 +47,18 @@
             "name": "Demetrio Filocamo",
             "email": "filocamo@demetr.io",
             "url": "https://github.com/demetrio812"
+        },
+        {
+            "name": "Alex Miller",
+            "email": "codex.nz@gmail.com",
+            "url": "https://github.com/codex-"
         }
     ],
     "bugs": {
-        "url": "https://github.com/AntonioCuevaUrraco/nativescript-mixpanel/issues"
+        "url": "https://github.com/nstudio/nativescript-mixpanel/issues"
     },
     "license": "Apache-2.0",
-    "homepage": "https://github.com/AntonioCuevaUrraco/nativescript-mixpanel",
+    "homepage": "https://github.com/nstudio/nativescript-mixpanel",
     "readmeFilename": "README.md",
     "peerDependencies": {
         "tns-core-modules": "^3.0.0"
