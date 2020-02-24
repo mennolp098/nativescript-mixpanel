@@ -1,7 +1,7 @@
 import { Observable } from 'tns-core-modules/data/observable';
-import { MixpanelHelper } from 'nativescript-mixpanel';
+import { MixpanelHelper } from '@nstudio/nativescript-mixpanel';
 
-export class HelloWorldModel extends Observable {
+export class MainModel extends Observable {
 
   constructor() {
     super();

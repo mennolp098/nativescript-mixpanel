@@ -1,14 +1,15 @@
-[![npm](https://img.shields.io/npm/v/nativescript-mixpanel.svg)](https://www.npmjs.com/package/nativescript-mixpanel)
-[![npm](https://img.shields.io/npm/dt/nativescript-mixpanel.svg?label=npm%20downloads)](https://www.npmjs.com/package/nativescript-mixpanel)
-
-
 # NativeScript Mixpanel
-A NativeScript plugin to provide the ability to integrate with Mixpanel.
+
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/nstudio/nativescript-mixpanel/Build%20CI?style=flat-square)](https://github.com/nstudio/nativescript-mixpanel/actions?workflow=Build+CI)
+[![npm](https://img.shields.io/npm/v/@nstudio/nativescript-mixpanel?style=flat-square)](https://www.npmjs.com/package/@nstudio/nativescript-mixpanel)
+[![npm](https://img.shields.io/npm/dt/@nstudio/nativescript-mixpanel?style=flat-square)](https://www.npmjs.com/package/@nstudio/nativescript-mixpanel)
+
+> A NativeScript plugin to provide the ability to integrate with Mixpanel.
 
 ## Installation
-From your command prompt/terminal go to your app's root folder and execute:
+From your command prompt/terminal go to your application's root folder and execute:
 
-`tns plugin add nativescript-mixpanel`
+`tns plugin add @nstudio/nativescript-mixpanel`
 
 ## Usage
 
@@ -17,18 +18,16 @@ From your command prompt/terminal go to your app's root folder and execute:
 
 In main.ts add the following before you bootstrap
 
-``` TS
-
-import {MixpanelHelper} from "nativescript-mixpanel";
+```typescript
+import { MixpanelHelper } from "@nstudio/nativescript-mixpanel";
 MixpanelHelper.init(YOUR_KEY_HERE);
-
 ```
-
 
 ## API
-``` TS
-import {MixpanelHelper} from "nativescript-mixpanel";
+```typescript
+import { MixpanelHelper } from "@nstudio/nativescript-mixpanel";
 ```
+
 - **MixpanelHelper.init(token: any)**
 - **MixpanelHelper.track(eventName: any, props?: any)**
 - **MixpanelHelper.timeEvent(eventName: any)**
@@ -41,6 +40,7 @@ import {MixpanelHelper} from "nativescript-mixpanel";
 
 ### Contributors
 
+- Alex Miller
 - Antonio Cueva Urraco
 - Blake Nussey
 - Demetrio Filocamo
