@@ -1,72 +1,87 @@
 {
-    "name": "@nstudio/nativescript-mixpanel",
-    "version": "1.0.0",
-    "description": "A NativeScript plugin for Mixpanel tracking",
-    "main": "mixpanel.js",
-    "typings": "index.d.ts",
-    "nativescript": {
-        "platforms": {
-            "android": "3.0.0",
-            "ios": "3.0.0"
-        }
+  "name": "@nstudio/nativescript-mixpanel",
+  "version": "1.0.0",
+  "description": "A NativeScript plugin for Mixpanel tracking",
+  "main": "mixpanel",
+  "typings": "index.d.ts",
+  "nativescript": {
+    "platforms": {
+      "android": "3.0.0",
+      "ios": "3.0.0"
+    }
+  },
+  "scripts": {
+    "tsc": "npm i && tsc",
+    "build": "npm run tsc && npm run build.native",
+    "build.native": "node scripts/build-native.js",
+    "tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude \"**/node_modules/**\"",
+    "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**' --exclude '**/platforms/**'",
+    "demo.ios": "npm i && cd ../demo && tns run ios",
+    "demo.android": "npm i && cd ../demo && tns run android",
+    "demo.reset": "cd ../demo && npx rimraf -- hooks node_modules platforms package-lock.json",
+    "plugin.prepare": "npm run build && cd ../demo && tns plugin remove nativescript-mixpanel && tns plugin add ../src",
+    "clean": "npm run demo.reset && npx rimraf -- node_modules package-lock.json && npm i"
+  },
+  "keywords": [
+    "NativeScript",
+    "JavaScript",
+    "Android",
+    "iOS",
+    "Mixpanel"
+  ],
+  "author": {
+    "name": "Antonio Cueva",
+    "email": "cuevajodar@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Blake Nussey",
+      "email": "blake@stageme.com",
+      "url": "https://github.com/bnussey"
     },
-    "scripts": {
-        "tsc": "npm i && tsc",
-        "build": "npm run tsc && npm run build.native",
-        "build.native": "node scripts/build-native.js",
-        "tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude \"**/node_modules/**\"",
-        "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**' --exclude '**/platforms/**'",
-        "demo.ios": "npm i && cd ../demo && tns run ios",
-        "demo.android": "npm i && cd ../demo && tns run android",
-        "demo.reset": "cd ../demo && npx rimraf -- hooks node_modules platforms package-lock.json",
-        "plugin.prepare": "npm run build && cd ../demo && tns plugin remove nativescript-mixpanel && tns plugin add ../src",
-        "clean": "npm run demo.reset && npx rimraf -- node_modules package-lock.json && npm i"
+    {
+      "name": "Demetrio Filocamo",
+      "email": "filocamo@demetr.io",
+      "url": "https://github.com/demetrio812"
     },
-    "keywords": [
-        "NativeScript",
-        "JavaScript",
-        "Android",
-        "iOS",
-        "Mixpanel"
-    ],
-    "author": {
-        "name": "Antonio Cueva",
-        "email": "cuevajodar@gmail.com"
-    },
-    "contributors": [
-        {
-            "name": "Blake Nussey",
-            "email": "blake@stageme.com",
-            "url": "https://github.com/bnussey"
-        },
-        {
-            "name": "Demetrio Filocamo",
-            "email": "filocamo@demetr.io",
-            "url": "https://github.com/demetrio812"
-        },
-        {
-            "name": "Alex Miller",
-            "email": "codex.nz@gmail.com",
-            "url": "https://github.com/codex-"
-        }
-    ],
-    "bugs": {
-        "url": "https://github.com/nstudio/nativescript-mixpanel/issues"
-    },
-    "license": "Apache-2.0",
-    "homepage": "https://github.com/nstudio/nativescript-mixpanel",
-    "readmeFilename": "README.md",
-    "peerDependencies": {
-        "tns-core-modules": "^3.0.0"
-    },
-    "devDependencies": {
-        "tns-core-modules": "^3.1.0",
-        "tns-platform-declarations": "^3.1.0",
-        "typescript": "~2.3.0",
-        "prompt": "^1.0.0",
-        "rimraf": "^2.5.0",
-        "tslint": "^5.0.0"
-    },
-    "dependencies": {},
-    "bootstrapper": "nativescript-plugin-seed"
+    {
+      "name": "Alex Miller",
+      "email": "codex.nz@gmail.com",
+      "url": "https://github.com/codex-"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/nstudio/nativescript-mixpanel/issues"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/nstudio/nativescript-mixpanel",
+  "readmeFilename": "README.md",
+  "peerDependencies": {
+    "tns-core-modules": "^6.3.0"
+  },
+  "devDependencies": {
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.8",
+    "tns-core-modules": "^3.1.0",
+    "tns-platform-declarations": "^6.3.0",
+    "typescript": "~3.7.5",
+    "prompt": "^1.0.0",
+    "prettier": "^1.19.1",
+    "rimraf": "^2.5.0",
+    "tslint": "^6.0.0"
+  },
+  "dependencies": {},
+  "bootstrapper": "nativescript-plugin-seed",
+  "lint-staged": {
+    "**/*.{js, css, ts, json, scss, html, xml, md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run tslint"
+    }
+  }
 }
