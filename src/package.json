@@ -61,7 +61,6 @@
   },
   "devDependencies": {
     "husky": "^4.2.3",
-    "lint-staged": "^10.0.8",
     "tns-core-modules": "^3.1.0",
     "tns-platform-declarations": "^6.3.0",
     "typescript": "~3.7.5",
@@ -72,12 +71,6 @@
   },
   "dependencies": {},
   "bootstrapper": "nativescript-plugin-seed",
-  "lint-staged": {
-    "**/*.{js, css, ts, json, scss, html, xml, md}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
