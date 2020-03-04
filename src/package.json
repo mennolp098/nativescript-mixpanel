@@ -14,6 +14,8 @@
     "tsc": "npm i && tsc",
     "build": "npm run tsc && npm run build.native",
     "build.native": "node scripts/build-native.js",
+    "format-check": "prettier --check \"./**/*.{json,ts}\"",
+    "format": "npm run format-check -- --write",
     "tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude \"**/node_modules/**\"",
     "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**' --exclude '**/platforms/**'",
     "demo.ios": "npm i && cd ../demo && tns run ios",
