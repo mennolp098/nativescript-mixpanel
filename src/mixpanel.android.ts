@@ -9,7 +9,6 @@ import {
 declare const com: any;
 
 type JSON = null | string | number | { [key: string]: JSON } | JSONArray;
-
 interface JSONArray extends Array<JSON> {}
 
 /**
@@ -128,7 +127,8 @@ export class Mixpanel {
   }
 
   /**
-   * Returns a Mixpanel.People object that can be used to set and increment People Analytics properties.
+   * Returns a Mixpanel.People object that can be used to set and increment People
+   * Analytics properties.
    */
   public static getPeople(): MixpanelPeople {
     return new MixpanelPeople(this.mixpanel);
@@ -257,7 +257,7 @@ export class Mixpanel {
    * name/value pairs that describe the properties of that event.
    *
    * @param eventName The name of the event to send.
-   * @param properties A JSONObject containing the key value pairs of the properties
+   * @param properties A JSON containing the key value pairs of the properties
    * to include in this event.
    */
   public static track(eventName: string, properties?: JSON): void {

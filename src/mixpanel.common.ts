@@ -1,3 +1,6 @@
+export type JSON = null | string | number | { [key: string]: JSON } | JSONArray;
+export interface JSONArray extends Array<JSON> {}
+
 export interface MixpanelCommon {
   identify: (identity: string) => void;
 }
