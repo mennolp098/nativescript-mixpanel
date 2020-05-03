@@ -1,4 +1,4 @@
-import * as app from "@nativescript/core/application";
+import { android } from "@nativescript/core/application";
 
 import {
   LOGGING,
@@ -66,7 +66,7 @@ export class Mixpanel {
       console.error(LOGGING.INIT_FAILURE);
     }
 
-    const context: any = app.android.context;
+    const context: any = android.context;
     // Ensure the context is valid.
     // tslint:disable-next-line: triple-equals
     if (context == undefined) {
