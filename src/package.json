@@ -15,18 +15,19 @@
     "url": "https://github.com/nstudio/nativescript-mixpanel.git"
   },
   "scripts": {
-    "tsc": "npm i && tsc",
+    "tsc": "tsc",
     "build": "npm run tsc && npm run build.native",
     "build.native": "node scripts/build-native.js",
     "format-check": "prettier --check \"./**/*.{json,ts}\"",
     "format": "npm run format-check -- --write",
-    "tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude \"**/node_modules/**\"",
-    "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**' --exclude '**/platforms/**'",
-    "demo.ios": "npm i && cd ../demo && tns run ios",
-    "demo.android": "npm i && cd ../demo && tns run android",
-    "demo.reset": "cd ../demo && npx rimraf -- hooks node_modules platforms package-lock.json",
+    "lint": "cd .. && tslint --config tslint.json -p ./src/tsconfig.json",
+    "ci.lint": "npm run lint && npm run demo.lint",
+    "demo.lint": "cd .. && tslint --config tslint.json -p ./demo/tsconfig.json",
+    "demo.ios": "cd ../demo && tns run ios",
+    "demo.android": "cd ../demo && tns run android",
+    "demo.reset": "cd ../demo && npx rimraf -- hooks node_modules platforms",
     "plugin.prepare": "npm run build && cd ../demo && tns plugin remove nativescript-mixpanel && tns plugin add ../src",
-    "clean": "npm run demo.reset && npx rimraf -- node_modules package-lock.json && npm i"
+    "clean": "npm run demo.reset && npx rimraf -- node_modules && npm i"
   },
   "keywords": [
     "NativeScript",
