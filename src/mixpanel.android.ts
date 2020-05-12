@@ -37,7 +37,7 @@ interface MixpanelAndroid extends MixpanelCommon {
   track: (eventName: string, properties?: org.json.JSONObject) => void;
 }
 
-export class Mixpanel {
+export class NativeScriptMixpanel {
   private static _mixpanel?: MixpanelAndroid;
 
   private static get mixpanel(): MixpanelAndroid {
@@ -58,11 +58,12 @@ export class Mixpanel {
    * @param token
    */
   public static init(token: string): void {
-    const mixPanel: any = com.mixpanel;
-    const mixpanelApi: MixpanelAndroid = mixPanel.android.mpmetrics.MixpanelAPI;
-    // Ensure the Mixpanel API loads.
+    const mixpanel: any = this.getNativeInstance();
+    const mixpanelApi: MixpanelAndroid = mixpanel.android.mpmetrics.MixpanelAPI;
+
+    // Ensure Mixpanel loads.
     // tslint:disable-next-line: triple-equals
-    if (mixPanel == undefined || mixpanelApi == undefined) {
+    if (mixpanel == undefined || mixpanelApi == undefined) {
       console.error(LOGGING.INIT_FAILURE);
     }
 
@@ -136,7 +137,7 @@ export class Mixpanel {
 
   /**
    * Register properties that will be sent with every subsequent call
-   * to  track(string, JSON).
+   * to track(string, JSON).
    *
    * SuperProperties are a collection of properties that will be sent with every
    * event to Mixpanel, and persist beyond the lifetime of your application.
@@ -267,6 +268,18 @@ export class Mixpanel {
       return;
     }
     this.mixpanel.track(eventName);
+  }
+
+  /**
+   * Attempt to capture the native instance of Mixpanel.
+   */
+  private static getNativeInstance(): any {
+    try {
+      return Mixpanel;
+    } catch (error) {
+      console.log(`${LOGGING.NATIVE_CAPTURE_FAILURE}`);
+    }
+    return undefined;
   }
 }
 

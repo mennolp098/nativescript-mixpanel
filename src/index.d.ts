@@ -1,7 +1,7 @@
 type JSON = null | string | number | { [key: string]: JSON } | JSONArray;
 interface JSONArray extends Array<JSON> {}
 
-export declare class Mixpanel {
+export declare class NativeScriptMixpanel {
   /**
    * Get the instance of MixpanelAPI associated with your Mixpanel project token.
    *
