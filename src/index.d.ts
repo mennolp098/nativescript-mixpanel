@@ -163,3 +163,40 @@ export declare class NativeScriptMixpanel {
    */
   public static track(eventName: string, properties?: JSON): void;
 }
+
+export declare class NativeScriptMixpanelPeople {
+  /**
+   * All future calls to the People object will rely on this value to assign
+   * and increment properties. The user identification will persist across
+   * restarts of your application. We recommend calling People.identify as soon
+   * as you know the distinct id of the user.
+   *
+   * @param distinctId  a String that uniquely identifies the user. Users
+   * identified with the same distinct id will be considered to be the same
+   * user in Mixpanel, across all platforms and devices. We recommend choosing
+   * a distinct id that is meaningful to your other systems (for example, a
+   * server-side account identifier), and using the same distinct id for both
+   * calls to People.identify and MixpanelAPI.identify(string).
+   */
+  public identify(distinctId: string): void;
+
+  /**
+   * Set a collection of properties on the identified user all at once.
+   *
+   * iOS: Incorrect types are converted to strings using
+   * [NSString stringWithFormat:@“%@”, value].
+   *
+   * You can override the default the current project token and distinct ID by
+   * including the special properties: $token and $distinct_id.
+   *
+   * If the existing user record on the server already has a value for a given
+   * property, the old value is overwritten. Other existing properties will
+   * not be affected.
+   *
+   * @param properties a JSONObject containing the collection of properties
+   * you wish to apply to the identified user. Each key in the JSONObject will
+   * be associated with a property name, and the value of that key will be
+   * assigned to the property.
+   */
+  public set(properties: JSON): void;
+}
