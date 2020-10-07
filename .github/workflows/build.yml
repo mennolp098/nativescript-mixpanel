@@ -38,12 +38,12 @@ jobs:
       - name: Build Android Demo App
         run: |
           cd demo
-          tns build android --env.uglify
+          tns build android --env.uglify --force
 
       - name: Build iOS Demo App
         run: |
           cd demo
-          tns build ios --env.uglify
+          tns build ios --env.uglify --force
 
       - name: Lint
         run: cd src && npm run ci.lint
