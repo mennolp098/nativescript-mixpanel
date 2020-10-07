@@ -1,31 +1,17 @@
 {
   "defaultSeverity": "error",
-  "extends": [
-    "tslint:recommended",
-    "tslint-config-prettier"
-  ],
+  "extends": ["tslint:recommended", "tslint-config-prettier"],
   "rules": {
-    "array-type": [
-      true,
-      "array-simple"
-    ],
+    "array-type": [true, "array-simple"],
     "arrow-return-shorthand": true,
-    "await-promise": [
-      true,
-      "PromisedAssertion"
-    ],
+    "await-promise": [true, "PromisedAssertion"],
     "binary-expression-operand-order": true,
     "curly": true,
     "interface-name": false,
     "interface-over-type-literal": true,
     "max-classes-per-file": false,
     "max-line-length": false,
-    "no-console": [
-      true,
-      "debug",
-      "time",
-      "timeEnd"
-    ],
+    "no-console": [true, "debug", "time", "timeEnd"],
     "no-default-export": true,
     "no-duplicate-imports": true,
     "no-floating-promises": true,
@@ -44,11 +30,7 @@
     "promise-function-async": true,
     "strict-type-predicates": true,
     "switch-default": true,
-    "typedef": [
-      true,
-      "call-signature",
-      "parameter"
-    ],
+    "typedef": [true, "call-signature", "parameter"],
     "variable-name": {
       "options": [
         "allow-leading-underscore",
