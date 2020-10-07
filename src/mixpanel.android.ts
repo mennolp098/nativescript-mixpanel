@@ -1,12 +1,10 @@
-import { android } from "@nativescript/core/application";
+import { android } from "@nativescript/core/application/application";
 
 import {
   LOGGING,
   MixpanelCommon,
   MixpanelPeopleCommon,
 } from "./mixpanel.common";
-
-declare const com: any;
 
 type JSON = null | string | number | { [key: string]: JSON } | JSONArray;
 interface JSONArray extends Array<JSON> {}
@@ -31,7 +29,7 @@ interface MixpanelAndroid extends MixpanelCommon {
 
   // Tracking
   alias: (alias: string, original: string | null) => void;
-  optInTracking: (distinctId?: string) => void;
+  optInTracking: () => void;
   optOutTracking: () => void;
   timeEvent: (eventName: string) => void;
   track: (eventName: string, properties?: org.json.JSONObject) => void;
@@ -59,12 +57,16 @@ export class NativeScriptMixpanel {
    */
   public static init(token: string): void {
     const mixpanel: any = this.getNativeInstance();
-    const mixpanelApi: MixpanelAndroid = mixpanel.android.mpmetrics.MixpanelAPI;
+    const mixpanelApi: MixpanelAndroid =
+      mixpanel && mixpanel.android.mpmetrics.MixpanelAPI;
+
+    let initFailed = false;
 
     // Ensure Mixpanel loads.
-    // tslint:disable-next-line: triple-equals
+    // tslint:disable-next-line: strict-type-predicates triple-equals
     if (mixpanel == undefined || mixpanelApi == undefined) {
       console.error(LOGGING.INIT_FAILURE);
+      initFailed = true;
     }
 
     const context: any = android.context;
@@ -72,9 +74,13 @@ export class NativeScriptMixpanel {
     // tslint:disable-next-line: triple-equals
     if (context == undefined) {
       console.error(LOGGING.CONTEXT_FAILURE);
+      initFailed = true;
     }
 
-    this.mixpanel = mixpanelApi.getInstance(context, token);
+    // If there is an init failure, prevent a hard crash.
+    if (!initFailed) {
+      this.mixpanel = mixpanelApi.getInstance(context, token);
+    }
   }
 
   /**
@@ -115,7 +121,7 @@ export class NativeScriptMixpanel {
    * for retention and funnel reporting, so be sure that the given value is globally unique
    * for each individual user you intend to track.
    */
-  public static identify(distinctId: string) {
+  public static identify(distinctId: string): void {
     this.mixpanel.identify(distinctId);
   }
 
@@ -131,8 +137,8 @@ export class NativeScriptMixpanel {
    * Returns a Mixpanel.People object that can be used to set and increment People
    * Analytics properties.
    */
-  public static getPeople(): MixpanelPeople {
-    return new MixpanelPeople(this.mixpanel);
+  public static getPeople(): NativeScriptMixpanelPeople {
+    return new NativeScriptMixpanelPeople(this.mixpanel);
   }
 
   /**
@@ -153,7 +159,7 @@ export class NativeScriptMixpanel {
    *
    * @param properties A JSON containing super properties to register
    */
-  public static registerSuperProperties(properties: JSON) {
+  public static registerSuperProperties(properties: JSON): void {
     const androidProps = new org.json.JSONObject(JSON.stringify(properties));
     this.mixpanel.registerSuperProperties(androidProps);
   }
@@ -196,15 +202,10 @@ export class NativeScriptMixpanel {
    * new alias to be used for Events and People.
    *
    * @param alias the new distinct_id that should represent original.
-   * @param original the old distinct_id that alias will be mapped to.
    */
-  public static alias(alias: string, original?: string): void {
-    if (!original) {
-      // tslint:disable-next-line: no-null-keyword
-      this.mixpanel.alias(alias, null);
-      return;
-    }
-    this.mixpanel.alias(alias, original);
+  public static alias(alias: string): void {
+    // tslint:disable-next-line: no-null-keyword
+    this.mixpanel.alias(alias, null);
   }
 
   /**
@@ -217,11 +218,7 @@ export class NativeScriptMixpanel {
    * If you want to identify the opt-in event and/or pass properties to
    * the event, see optInTracking(String).
    */
-  public static optInTracking(distinctId?: string): void {
-    if (distinctId) {
-      this.mixpanel.optInTracking(distinctId);
-      return;
-    }
+  public static optInTracking(): void {
     this.mixpanel.optInTracking();
   }
 
@@ -275,7 +272,7 @@ export class NativeScriptMixpanel {
    */
   private static getNativeInstance(): any {
     try {
-      return Mixpanel;
+      return com.mixpanel || Mixpanel;
     } catch (error) {
       console.log(`${LOGGING.NATIVE_CAPTURE_FAILURE}`);
     }
@@ -283,7 +280,7 @@ export class NativeScriptMixpanel {
   }
 }
 
-export class MixpanelPeople {
+export class NativeScriptMixpanelPeople {
   private _people?: MixpanelPeopleCommon;
 
   private get people(): MixpanelPeopleCommon {
@@ -294,8 +291,8 @@ export class MixpanelPeople {
     throw new Error(LOGGING.PEOPLE_UNDEFINED_INSTANCE);
   }
 
-  private set people(peopleInstanceInstance: MixpanelPeopleCommon) {
-    this._people = peopleInstanceInstance;
+  private set people(peopleInstance: MixpanelPeopleCommon) {
+    this._people = peopleInstance;
   }
 
   constructor(mixpanel: MixpanelAndroid) {
@@ -316,7 +313,7 @@ export class MixpanelPeople {
    * user in Mixpanel, across all platforms and devices. We recommend choosing
    * a distinct id that is meaningful to your other systems (for example, a
    * server-side account identifier), and using the same distinct id for both
-   * calls to People.identify and MixpanelAPI.identify(string)
+   * calls to People.identify and MixpanelAPI.identify(string).
    */
   public identify(distinctId: string): void {
     this.people.identify(distinctId);
@@ -330,7 +327,7 @@ export class MixpanelPeople {
    * be associated with a property name, and the value of that key will be
    * assigned to the property.
    */
-  public set(properties: JSON) {
+  public set(properties: JSON): void {
     const androidProps = new org.json.JSONObject(JSON.stringify(properties));
     this.people.set(androidProps);
   }
