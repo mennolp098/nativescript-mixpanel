@@ -123,11 +123,8 @@ export declare class NativeScriptMixpanel {
    * People updates and track calls will be sent to Mixpanel after using
    * this method. This method will internally track an opt-in event to
    * your project.
-   *
-   * If you want to identify the opt-in event and/or pass properties to
-   * the event, see optInTracking(String).
    */
-  public static optInTracking(distinctId?: string): void;
+  public static optInTracking(): void;
 
   /**
    * Use this method to opt-out a user from tracking.
