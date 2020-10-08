@@ -14,25 +14,28 @@ interface MixpanelIos {
   distinctId: string;
   people: MixpanelPeopleCommon;
 
-  flush: () => void;
+  // Identity
   identify: (distinctId: string) => void;
-  reset: () => void;
+  createAliasForDistinctID: (alias: string, distinctId: string) => void;
+
+  // Super Properties
+  registerSuperProperties: (properties: NSDictionary<any, any>) => void;
+  unregisterSuperProperty: (superPropertyName: string) => void;
+  clearSuperProperties: () => void;
+
+  // Tracking
+  track: (event: string) => void;
+  trackProperties: (event: string, properties: NSDictionary<any, any>) => void;
+  timeEvent: (eventName: string) => void;
 
   // People
   getPeople: () => MixpanelPeopleCommon;
 
-  // Super Properties
-  registerSuperProperties: (properties: NSDictionary<any, any>) => void;
-  clearSuperProperties: () => void;
-  unregisterSuperProperty: (superPropertyName: string) => void;
-
-  // Tracking
-  createAliasForDistinctID: (alias: string, distinctId: string) => void;
+  // Other
   optInTracking: () => void;
   optOutTracking: () => void;
-  timeEvent: (eventName: string) => void;
-  track: (event: string) => void;
-  trackProperties: (event: string, properties: NSDictionary<any, any>) => void;
+  flush: () => void;
+  reset: () => void;
 }
 
 export class NativeScriptMixpanel {
@@ -64,20 +67,6 @@ export class NativeScriptMixpanel {
   }
 
   /**
-   * Uploads queued data to the Mixpanel server.
-   *
-   * By default, queued data is flushed to the Mixpanel servers every
-   * minute (the default for `flushInterval`), and on background (since
-   * `flushOnBackground` is on by default).
-   *
-   * You only need to call this method manually if you want to force a
-   * flush at a particular moment.
-   */
-  public static flush(): void {
-    this.mixpanel.flush();
-  }
-
-  /**
    * Mixpanel will choose a default local distinct ID.
    *
    * For tracking events, you do not need to call `identify`: However, Mixpanel
@@ -95,19 +84,12 @@ export class NativeScriptMixpanel {
   }
 
   /**
-   * Clears all stored properties and distinct IDs.
+   * The alias method creates an alias which Mixpanel will use to remap one id to another.
    *
-   * Useful if your application's user logs out.
+   * @param alias A unique identifier that you want to use as an identifier for this user.
    */
-  public static reset(): void {
-    this.mixpanel.reset();
-  }
-
-  /**
-   * Accessor to the Mixpanel People API object.
-   */
-  public static getPeople(): NativeScriptMixpanelPeople {
-    return new NativeScriptMixpanelPeople(this.mixpanel);
+  public static alias(alias: string): void {
+    this.mixpanel.createAliasForDistinctID(alias, this.mixpanel.distinctId);
   }
 
   /**
@@ -122,13 +104,6 @@ export class NativeScriptMixpanel {
   public static registerSuperProperties(properties: JSON): void {
     const iosProps = NSDictionary.dictionaryWithDictionary(properties as any);
     this.mixpanel.registerSuperProperties(iosProps);
-  }
-
-  /**
-   * Clears all currently set super properties.
-   */
-  public static clearSuperProperties(): void {
-    this.mixpanel.clearSuperProperties();
   }
 
   /**
@@ -148,12 +123,48 @@ export class NativeScriptMixpanel {
   }
 
   /**
-   * The alias method creates an alias which Mixpanel will use to remap one id to another.
-   *
-   * @param alias A unique identifier that you want to use as an identifier for this user.
+   * Clears all currently set super properties.
    */
-  public static alias(alias: string): void {
-    this.mixpanel.createAliasForDistinctID(alias, this.mixpanel.distinctId);
+  public static clearSuperProperties(): void {
+    this.mixpanel.clearSuperProperties();
+  }
+
+  /**
+   * Tracks an event.
+   *
+   * @param event event name
+   * @param properties properties JSON
+   */
+  public static track(event: string, properties?: JSON): void {
+    if (properties) {
+      const iosProps = NSDictionary.dictionaryWithDictionary<any, any>(
+        properties as any
+      );
+      this.mixpanel.trackProperties(event, iosProps);
+    }
+    this.mixpanel.track(event);
+  }
+
+  /**
+   * This method is intended to be used in advance of events that have a duration.
+   * For example, if a developer were to track an “Image Upload” event she might want
+   * to also know how long the upload took.
+   *
+   * Calling this method before the upload code would implicitly cause the track
+   * call to record its duration.
+   *
+   * @param eventName identical to the name of the event that will be tracked.
+   */
+  public static timeEvent(eventName: string): void {
+    this.mixpanel.timeEvent(eventName);
+  }
+
+  /**
+   * Returns a NativeScriptMixpanelPeople instance that can be used to identify
+   * and set properties.
+   */
+  public static getPeople(): NativeScriptMixpanelPeople {
+    return new NativeScriptMixpanelPeople(this.mixpanel);
   }
 
   /**
@@ -173,33 +184,26 @@ export class NativeScriptMixpanel {
   }
 
   /**
-   * This method is intended to be used in advance of events that have a duration.
-   * For example, if a developer were to track an “Image Upload” event she might want
-   * to also know how long the upload took.
+   * Uploads queued data to the Mixpanel server.
    *
-   * Calling this method before the upload code would implicitly cause the track
-   * call to record its duration.
+   * By default, queued data is flushed to the Mixpanel servers every
+   * minute (the default for `flushInterval`), and on background (since
+   * `flushOnBackground` is on by default).
    *
-   * @param eventName identical to the name of the event that will be tracked.
+   * You only need to call this method manually if you want to force a
+   * flush at a particular moment.
    */
-  public static timeEvent(eventName: string): void {
-    this.mixpanel.timeEvent(eventName);
+  public static flush(): void {
+    this.mixpanel.flush();
   }
 
   /**
-   * Tracks an event.
+   * Clears all stored properties and distinct IDs.
    *
-   * @param event event name
-   * @param properties properties JSON
+   * Useful if your application's user logs out.
    */
-  public static track(event: string, properties?: JSON): void {
-    if (properties) {
-      const iosProps = NSDictionary.dictionaryWithDictionary<any, any>(
-        properties as any
-      );
-      this.mixpanel.trackProperties(event, iosProps);
-    }
-    this.mixpanel.track(event);
+  public static reset(): void {
+    this.mixpanel.reset();
   }
 
   /**
