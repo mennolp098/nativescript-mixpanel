@@ -1,5 +1,4 @@
-type JSON = null | string | number | { [key: string]: JSON } | JSONArray;
-interface JSONArray extends Array<JSON> {}
+import { JSONObject } from "./mixpanel.common";
 
 export declare class NativeScriptMixpanel {
   /**
@@ -71,7 +70,7 @@ export declare class NativeScriptMixpanel {
    *
    * @param properties A JSON object containing super properties to register.
    */
-  public static registerSuperProperties(properties: JSON): void;
+  public static registerSuperProperties(properties: JSONObject): void;
 
   /**
    * Remove a single superProperty, so that it will not be sent with future calls
@@ -108,7 +107,7 @@ export declare class NativeScriptMixpanel {
    * @param properties A JSON object containing the key value pairs of the properties
    * to include in this event.
    */
-  public static track(eventName: string, properties?: JSON): void;
+  public static track(eventName: string, properties?: JSONObject): void;
 
   /**
    * Begin timing of an event. Calling timeEvent("Thing") will not send an event,
@@ -199,5 +198,5 @@ export declare class NativeScriptMixpanelPeople {
    * be associated with a property name, and the value of that key will be
    * assigned to the property.
    */
-  public set(properties: JSON): void;
+  public set(properties: JSONObject): void;
 }

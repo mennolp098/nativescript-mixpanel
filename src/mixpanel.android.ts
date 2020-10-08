@@ -1,18 +1,11 @@
 import { android } from "@nativescript/core/application/application";
 
-import {
-  LOGGING,
-  MixpanelCommon,
-  MixpanelPeopleCommon,
-} from "./mixpanel.common";
-
-type JSON = null | string | number | { [key: string]: JSON } | JSONArray;
-interface JSONArray extends Array<JSON> {}
+import { JSONObject, LOGGING } from "./mixpanel.common";
 
 /**
  * Typed interface representing the native instance of Mixpanel.
  */
-interface MixpanelAndroid extends MixpanelCommon {
+interface MixpanelAndroid {
   getDistinctId: () => string;
   getInstance: (context: any, token: string) => MixpanelAndroid;
 
@@ -30,13 +23,21 @@ interface MixpanelAndroid extends MixpanelCommon {
   timeEvent: (eventName: string) => void;
 
   // People
-  getPeople: () => MixpanelPeopleCommon;
+  getPeople: () => MixpanelPeopleAndroid;
 
   // Other
   optInTracking: () => void;
   optOutTracking: () => void;
   flush: () => void;
   reset: () => void;
+}
+
+/**
+ * Typed interface representing the native instance of MixpanelPeople.
+ */
+interface MixpanelPeopleAndroid {
+  identify: (distinctId: string) => void;
+  set: (properties: org.json.JSONObject) => void;
 }
 
 export class NativeScriptMixpanel {
@@ -158,7 +159,7 @@ export class NativeScriptMixpanel {
    *
    * @param properties A JSON containing super properties to register
    */
-  public static registerSuperProperties(properties: JSON): void {
+  public static registerSuperProperties(properties: JSONObject): void {
     const androidProps = new org.json.JSONObject(JSON.stringify(properties));
     this.mixpanel.registerSuperProperties(androidProps);
   }
@@ -202,7 +203,7 @@ export class NativeScriptMixpanel {
    * @param properties A JSON containing the key value pairs of the properties
    * to include in this event.
    */
-  public static track(eventName: string, properties?: JSON): void {
+  public static track(eventName: string, properties?: JSONObject): void {
     if (properties) {
       const androidProps = new org.json.JSONObject(JSON.stringify(properties));
       this.mixpanel.track(eventName, androidProps);
@@ -294,9 +295,9 @@ export class NativeScriptMixpanel {
 }
 
 export class NativeScriptMixpanelPeople {
-  private _people?: MixpanelPeopleCommon;
+  private _people?: MixpanelPeopleAndroid;
 
-  private get people(): MixpanelPeopleCommon {
+  private get people(): MixpanelPeopleAndroid {
     if (this._people) {
       return this._people;
     }
@@ -304,7 +305,7 @@ export class NativeScriptMixpanelPeople {
     throw new Error(LOGGING.PEOPLE_UNDEFINED_INSTANCE);
   }
 
-  private set people(peopleInstance: MixpanelPeopleCommon) {
+  private set people(peopleInstance: MixpanelPeopleAndroid) {
     this._people = peopleInstance;
   }
 
@@ -340,7 +341,7 @@ export class NativeScriptMixpanelPeople {
    * be associated with a property name, and the value of that key will be
    * assigned to the property.
    */
-  public set(properties: JSON): void {
+  public set(properties: JSONObject): void {
     const androidProps = new org.json.JSONObject(JSON.stringify(properties));
     this.people.set(androidProps);
   }

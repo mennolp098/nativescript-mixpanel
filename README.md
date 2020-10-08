@@ -14,7 +14,7 @@ From your command prompt/terminal go to your application's root folder and execu
 
 # Usage
 
-## Angular Example
+## Example
 
 This can be initialised at various points in your application, i.e. in a service. However it is recommended to initialise this in your `main.ts` file.
 
