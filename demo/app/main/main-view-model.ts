@@ -59,14 +59,10 @@ export class MainModel extends Observable {
         console.log("Test: Time Event: Begin");
 
         const eventName = "Time Event Test";
-        // Start Timer
         NativeScriptMixpanel.timeEvent(eventName);
 
         await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        // End Timer
-        NativeScriptMixpanel.timeEvent(eventName);
-
+        NativeScriptMixpanel.track(eventName);
         console.log("Test: Time Event: Finish");
     }
 
