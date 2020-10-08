@@ -149,26 +149,6 @@ To clear all superProperties, use clearSuperProperties.
 | superPropertyName | string | name of the property to unregister |
 
 ```typescript
-NativeScriptMixpanel.registerSuperProperties({
-  "Test Type": "test value",
-});
-```
-
-#### **`unregisterSuperProperty(superPropertyName: string): void`**
-
-Remove a single superProperty, so that it will not be sent with future calls
-to track(String, JSONObject).
-
-If there is a superProperty registered with the given name, it will be permanently
-removed from the existing superProperties.
-
-To clear all superProperties, use clearSuperProperties.
-
-| Parameter         | Type   | Description                        |
-| ----------------- | ------ | ---------------------------------- |
-| superPropertyName | string | name of the property to unregister |
-
-```typescript
 NativeScriptMixpanel.unregisterSuperProperty("Test Type");
 ```
 
