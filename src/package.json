@@ -1,6 +1,6 @@
 {
   "name": "@nstudio/nativescript-mixpanel",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A NativeScript plugin for Mixpanel tracking",
   "main": "mixpanel",
   "typings": "index.d.ts",
@@ -83,8 +83,7 @@
   "bootstrapper": "nativescript-plugin-seed",
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm run tslint && npm run format-check"
+      "pre-push": "npm run ci.lint && npm run format.check"
     }
   }
 }
