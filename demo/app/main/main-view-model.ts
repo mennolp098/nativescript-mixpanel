@@ -48,6 +48,21 @@ export class MainModel extends Observable {
         NativeScriptMixpanel.registerSuperProperties(this.testProps);
     }
 
+    public onUnregisterSuperPropertyPress(): void {
+        console.log("Test: Unregister Super Property");
+        // Register property to remove
+        NativeScriptMixpanel.registerSuperProperties({
+            "special property": "magical",
+        });
+
+        NativeScriptMixpanel.unregisterSuperProperty("special property");
+    }
+
+    public onClearPress(): void {
+        console.log("Test: Clear Super Properties");
+        NativeScriptMixpanel.clearSuperProperties();
+    }
+
     public onTrackPress(): void {
         console.log("Test: Track");
         NativeScriptMixpanel.track("test event", {
