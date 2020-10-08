@@ -17,10 +17,7 @@ jobs:
           node-version: "10.x"
 
       - name: Build Plugin Source
-        run: cd src && npm i && npm i -g typescript && tsc
-
-      - name: Lint
-        run: cd src && npm run tslint
+        run: cd src && npm i && npx tsc
 
       - name: Setup JDK 1.8
         uses: actions/setup-java@v1
@@ -31,16 +28,25 @@ jobs:
         run: |
           sudo pip install --upgrade pip
           sudo pip install six
+
       - name: Setup NativeScript CLI
         run: |
           echo no | npm i -g nativescript
           tns usage-reporting disable
           tns error-reporting disable
+
       - name: Build Android Demo App
         run: |
           cd demo
-          tns build android --env.uglify
+          tns build android --env.uglify --force
+
       - name: Build iOS Demo App
         run: |
           cd demo
-          tns build ios --env.uglify
+          tns build ios --env.uglify --force
+
+      - name: Lint
+        run: cd src && npm run ci.lint
+
+      - name: Format
+        run: cd src && npm run format.check

@@ -1,35 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--Describe the permissions, features or other configurations required by your plugin for Android.
-        To read more about android permissions go to https://developer.android.com/guide/topics/permissions/index.html -->
-    <!--EXAMPLE: uses-permission android:name="android.permission.INTERNET"/> -->
+    <!--
+        Mipanel Documentation specifies the below.
+        Source: https://developer.mixpanel.com/docs/android
+    -->
 
-    <meta-data android:name="com.mixpanel.android.MPConfig.ResourcePackageName" android:value="your.package.name"/>
-    <permission
-            android:name="your.package.name.permission.C2D_MESSAGE"
-            android:protectionLevel="signature"/>
-    <uses-permission
-            android:name="your.package.name.permission.C2D_MESSAGE"/>
-    <uses-permission
-            android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission
-            android:name="com.google.android.c2dm.permission.RECEIVE"/>
-    <uses-permission
-            android:name="android.permission.WAKE_LOCK"/>
+    <meta-data android:name="com.mixpanel.android.MPConfig.ResourcePackageName" android:value="mixpanel"/>
+
+    <!--
+        This permission is required to allow the application to send
+        events and properties to Mixpanel.
+    -->
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!--
+        This permission is optional but recommended so we can be smart
+        about when to send data.
+    -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!--
+        This permission is optional but recommended so events will
+        contain information about bluetooth state
+    -->
     <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <application>
-        <!-- <receiver android:name="com.mixpanel.android.mpmetrics.GCMReceiver"
-                  android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action
-                        android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                <action
-                        android:name="com.google.android.c2dm.intent.REGISTRATION"/>
-                <category android:name="your.package.name"/>
-            </intent-filter>
-        </receiver> -->
-    </application>
+
 </manifest>

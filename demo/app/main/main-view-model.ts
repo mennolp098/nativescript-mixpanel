@@ -1,12 +1,21 @@
-import { MixpanelHelper } from "@nstudio/nativescript-mixpanel";
-import { Observable } from "tns-core-modules/data/observable";
+import { Observable } from "@nativescript/core/data/observable/observable";
 import { setTimeout } from "@nativescript/core/timer";
+import {
+    NativeScriptMixpanel,
+    NativeScriptMixpanelPeople,
+} from "@nstudio/nativescript-mixpanel";
 
 import { MIXPANEL_TOKEN } from "~/constants";
 
 export class MainModel extends Observable {
     public token: string = MIXPANEL_TOKEN;
     public testsEnabled: boolean = this.token.length > 0;
+
+    private people?: NativeScriptMixpanelPeople;
+
+    private readonly testProps = {
+        "Test Type": "test value",
+    };
 
     constructor() {
         super();
@@ -18,57 +27,113 @@ export class MainModel extends Observable {
         }
 
         // This token should be set in constants.ts
-        MixpanelHelper.init(MIXPANEL_TOKEN);
+        NativeScriptMixpanel.init(MIXPANEL_TOKEN);
         console.log(`Mixpanel initialised, token: ${MIXPANEL_TOKEN}`);
     }
 
     // User Identity
-    public onIdentifyPress() {
+    public onIdentifyPress(): void {
         console.log("Test: Identify");
-        MixpanelHelper.identify("test identity");
+        NativeScriptMixpanel.identify("test identity");
     }
 
-    public onAliasPress() {
+    public onGetDistinctIdPress(): void {
+        console.log("Test: Get Distinct ID");
+        const distinctId = NativeScriptMixpanel.getDistinctId();
+        console.log(`Test: Distinct ID: ${distinctId}`);
+    }
+
+    public onAliasPress(): void {
         console.log("Test: Alias");
-        MixpanelHelper.alias("test alias");
+        NativeScriptMixpanel.alias("test alias");
     }
 
     // Events
-    public onRegisterSuperPropertiesPress() {
+    public onRegisterSuperPropertiesPress(): void {
         console.log("Test: Register Super Properties");
-        MixpanelHelper.registerSuperProperties({
-            "Test Type": "test value"
-        });
+        NativeScriptMixpanel.registerSuperProperties(this.testProps);
     }
 
-    public onTrackPress() {
+    public onUnregisterSuperPropertyPress(): void {
+        console.log("Test: Unregister Super Property");
+        // Register property to remove
+        NativeScriptMixpanel.registerSuperProperties({
+            "special property": "magical",
+        });
+
+        NativeScriptMixpanel.unregisterSuperProperty("special property");
+    }
+
+    public onClearPress(): void {
+        console.log("Test: Clear Super Properties");
+        NativeScriptMixpanel.clearSuperProperties();
+    }
+
+    public onTrackPress(): void {
         console.log("Test: Track");
-        MixpanelHelper.track("test event", {
-            tracking: "this"
+        NativeScriptMixpanel.track("test event", {
+            tracking: "this",
         });
     }
 
-    public async onTimeEventPress() {
-        console.log("Test: Time Event");
+    public async onTimeEventPress(): Promise<void> {
+        console.log("Test: Time Event: Begin");
 
         const eventName = "Time Event Test";
-        // Start Timer
-        MixpanelHelper.timeEvent(eventName);
+        NativeScriptMixpanel.timeEvent(eventName);
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        NativeScriptMixpanel.track(eventName);
+        console.log("Test: Time Event: Finish");
+    }
 
-        // End Timer
-        MixpanelHelper.timeEvent(eventName);
+    // People
+    public onPeopleGetPeoplePress(): void {
+        console.log("Test: Get People");
+        this.people = NativeScriptMixpanel.getPeople();
+        if (!this.people) {
+            console.error(
+                "Failed: 'NativeScriptMixpanel.getPeople()': returned undefined."
+            );
+        }
+    }
+
+    public onPeopleIdentifyPress(): void {
+        console.log("Test: People Set Identify");
+        if (!this.people) {
+            console.error("Please press 'Get People' first.");
+            return;
+        }
+        this.people.identify(MIXPANEL_TOKEN);
+    }
+
+    public onPeopleSetPropertiesPress(): void {
+        console.log("Test: People Set Properties");
+        if (!this.people) {
+            console.error("Please press 'Get People' first.");
+            return;
+        }
+        this.people.set(this.testProps);
     }
 
     // Other
-    public onFlushPress() {
-        console.log("Test: Flush");
-        MixpanelHelper.flush();
+    public onOptOutPress(): void {
+        console.log("Test: Opt Out of Tracking");
+        NativeScriptMixpanel.optOutTracking();
     }
 
-    public onResetPress() {
+    public onOptInPress(): void {
+        console.log("Test: Opt In to Tracking");
+        NativeScriptMixpanel.optInTracking();
+    }
+
+    public onFlushPress(): void {
+        console.log("Test: Flush");
+        NativeScriptMixpanel.flush();
+    }
+
+    public onResetPress(): void {
         console.log("Test: Reset");
-        MixpanelHelper.reset();
+        NativeScriptMixpanel.reset();
     }
 }
