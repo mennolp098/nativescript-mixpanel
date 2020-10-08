@@ -6,34 +6,43 @@
   "typings": "index.d.ts",
   "nativescript": {
     "platforms": {
-      "android": "3.0.0",
-      "ios": "3.0.0"
+      "android": "6.5.3",
+      "ios": "6.5.3"
     }
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nstudio/nativescript-mixpanel.git"
+  },
   "scripts": {
-    "tsc": "npm i && tsc",
+    "tsc": "tsc",
     "build": "npm run tsc && npm run build.native",
     "build.native": "node scripts/build-native.js",
-    "tslint": "cd .. && tslint \"**/*.ts\" --config tslint.json --exclude \"**/node_modules/**\"",
-    "ci.tslint": "npm i && tslint '**/*.ts' --config '../tslint.json' --exclude '**/node_modules/**' --exclude '**/platforms/**'",
-    "demo.ios": "npm i && cd ../demo && tns run ios",
-    "demo.android": "npm i && cd ../demo && tns run android",
-    "demo.reset": "cd ../demo && npx rimraf -- hooks node_modules platforms package-lock.json",
-    "plugin.prepare": "npm run build && cd ../demo && tns plugin remove nativescript-mixpanel && tns plugin add ../src",
-    "clean": "npm run demo.reset && npx rimraf -- node_modules package-lock.json && npm i"
+    "format.check": "prettier --check \"../**/*.{json,ts}\"",
+    "format.write": "npm run format.check -- --write",
+    "lint": "cd .. && tslint --config tslint.json -p ./src/tsconfig.json",
+    "ci.lint": "npm run lint && npm run demo.lint",
+    "demo.lint": "cd .. && tslint --config tslint.json -p ./demo/tsconfig.json",
+    "demo.ios": "cd ../demo && npm i &&  tns run ios",
+    "demo.android": "cd ../demo && npm i && tns run android",
+    "demo.reset": "cd ../demo && npx rimraf -- hooks node_modules platforms",
+    "plugin.prepare": "npm run build && cd ../demo && tns plugin remove @nstudio/nativescript-mixpanel && tns plugin add ../src",
+    "clean": "npm run demo.reset && npx rimraf -- node_modules && npm i"
   },
   "keywords": [
-    "NativeScript",
-    "JavaScript",
     "Android",
     "iOS",
-    "Mixpanel"
+    "JavaScript",
+    "Mixpanel",
+    "NativeScript",
+    "TypeScript"
   ],
-  "author": {
-    "name": "Antonio Cueva",
-    "email": "cuevajodar@gmail.com"
-  },
   "contributors": [
+    {
+      "name": "Antonio Cueva",
+      "email": "cuevajodar@gmail.com",
+      "url": "https://github.com/AntonioCuevaUrraco"
+    },
     {
       "name": "Blake Nussey",
       "email": "blake@stageme.com",
@@ -57,31 +66,25 @@
   "homepage": "https://github.com/nstudio/nativescript-mixpanel",
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "tns-core-modules": "^6.3.0"
+    "@nativescript/core": ">=6.5.0"
   },
   "devDependencies": {
-    "husky": "^4.2.3",
-    "lint-staged": "^10.0.8",
-    "tns-core-modules": "^3.1.0",
-    "tns-platform-declarations": "^6.3.0",
-    "typescript": "~3.7.5",
+    "@nativescript/core": "^6.5.20",
+    "husky": "^4.3.0",
+    "prettier": "^2.1.2",
     "prompt": "^1.0.0",
-    "prettier": "^1.19.1",
-    "rimraf": "^2.5.0",
-    "tslint": "^6.0.0"
+    "rimraf": "^3.0.2",
+    "tns-platform-declarations": "~6.5.15",
+    "tslint": "^6.1.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "~3.7.5"
   },
   "dependencies": {},
   "bootstrapper": "nativescript-plugin-seed",
-  "lint-staged": {
-    "**/*.{js, css, ts, json, scss, html, xml, md}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "npm run tslint"
+      "pre-push": "npm run tslint && npm run format-check"
     }
   }
 }
