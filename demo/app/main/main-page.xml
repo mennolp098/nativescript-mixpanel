@@ -5,33 +5,44 @@
       <ActionBar title="Mixpanel plugin demo"/>
   </Page.actionBar>
   <ScrollView orientation="vertical">
-    <GridLayout rows="auto, 15, auto, auto, auto, 15, auto, auto, auto, auto, 15, auto, auto, auto, 15, auto, auto, auto, auto, 15, auto, auto, auto, auto, auto, *">
+    <GridLayout rows="auto, 15, auto, 15, auto, 15, auto, 15, auto, 15, auto, *">
       <Label row="0" text="{{'Using token: ' + token}}" class="t-10 text-center" style="color: green;" visibility="{{ token !== '' ? 'visible' : 'collapsed' }}" textWrap="true"/>
       <Label row="0" text="No token has been set, please set token in constants.ts" class="t-10 font-weight-bold text-center" style="color: red;" visibility="{{ token === '' ? 'visible' : 'collapsed' }}" textWrap="true"/>
 
-      <Label row="2" text="User Identity" class="h3 text-center" textWrap="true"/>
-      <Button row="3" text="Identify" tap="{{ onIdentifyPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
-      <Button row="4" text="Alias" tap="{{ onAliasPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+      <GridLayout row="2" rows="auto, auto, auto, auto">
+        <Label row="0" text="User Identity" class="h3 text-center" textWrap="true"/>
+        <Button row="1" text="Identify" tap="{{ onIdentifyPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+        <Button row="2" text="Get Distinct ID" tap="{{ onGetDistinctIdPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+        <Button row="3" text="Alias" tap="{{ onAliasPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+      </GridLayout>
 
-      <Label row="6" text="Super Properties" class="h3 text-center" textWrap="true"/>
-      <Button row="7" text="Register Super Properties" tap="{{ onRegisterSuperPropertiesPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
-      <Button row="8" text="Clear Super Property" tap="{{ onUnregisterSuperPropertyPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
-      <Button row="9" text="Clear All Super Properties" tap="{{ onClearPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+      <GridLayout row="4" rows="auto, auto, auto, auto">
+        <Label row="0" text="Super Properties" class="h3 text-center" textWrap="true"/>
+        <Button row="1" text="Register Super Properties" tap="{{ onRegisterSuperPropertiesPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+        <Button row="2" text="Clear Super Property" tap="{{ onUnregisterSuperPropertyPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+        <Button row="3" text="Clear All Super Properties" tap="{{ onClearPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+      </GridLayout>
 
-      <Label row="11" text="Events" class="h3 text-center" textWrap="true"/>
-      <Button row="12" text="Track" tap="{{ onTrackPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
-      <Button row="13" text="Time Event" tap="{{ onTimeEventPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+      <GridLayout row="6" rows="auto, auto, auto">
+        <Label row="0" text="Events" class="h3 text-center" textWrap="true"/>
+        <Button row="1" text="Track" tap="{{ onTrackPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+        <Button row="2" text="Time Event" tap="{{ onTimeEventPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+      </GridLayout>
 
-      <Label row="15" text="People" class="h3 text-center" textWrap="true"/>
-      <Button row="16" text="Get People" tap="{{ onPeopleGetPeoplePress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
-      <Button row="17" text="Identify" tap="{{ onPeopleIdentifyPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
-      <Button row="18" text="Set Properties" tap="{{ onPeopleSetPropertiesPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+      <GridLayout row="8" rows="auto, auto, auto, auto">
+        <Label row="0" text="People" class="h3 text-center" textWrap="true"/>
+        <Button row="1" text="Get People" tap="{{ onPeopleGetPeoplePress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+        <Button row="2" text="Identify" tap="{{ onPeopleIdentifyPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+        <Button row="3" text="Set Properties" tap="{{ onPeopleSetPropertiesPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+      </GridLayout>
 
-      <Label row="20" text="Other" class="h3 text-center" textWrap="true"/>
-      <Button row="21" text="Opt Out of Tracking" tap="{{ onOptOutPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
-      <Button row="22" text="Opt In to Tracking" tap="{{ onOptInPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
-      <Button row="23" text="Flush" tap="{{ onFlushPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
-      <Button row="24" text="Reset" tap="{{ onResetPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+      <GridLayout row="10" rows="auto, auto, auto, auto, auto">
+        <Label row="0" text="Other" class="h3 text-center" textWrap="true"/>
+        <Button row="1" text="Opt Out of Tracking" tap="{{ onOptOutPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+        <Button row="2" text="Opt In to Tracking" tap="{{ onOptInPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+        <Button row="3" text="Flush" tap="{{ onFlushPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+        <Button row="4" text="Reset" tap="{{ onResetPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+      </GridLayout>
     </GridLayout>
   </ScrollView>
 </Page>

@@ -75,12 +75,19 @@ export class NativeScriptMixpanel {
    * then they are queued up and flushed once `identify` is called.
    *
    * If you’d like to use the default distinct ID for Mixpanel People as well (recommended),
-   * call `identify` using the current distinct ID: [mixpanel identify:mixpanel.distinctId].
+   * call `identify` using the current distinct ID: getDistinctId.
    *
    * @param distinctId string that uniquely identifies the current user
    */
   public static identify(distinctId: string): void {
     this.mixpanel.identify(distinctId);
+  }
+
+  /**
+   * The distinct ID of the current user.
+   */
+  public static getDistinctId(): string {
+    return this.mixpanel.distinctId;
   }
 
   /**

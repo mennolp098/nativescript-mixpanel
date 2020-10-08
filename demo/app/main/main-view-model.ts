@@ -37,6 +37,12 @@ export class MainModel extends Observable {
         NativeScriptMixpanel.identify("test identity");
     }
 
+    public onGetDistinctIdPress(): void {
+        console.log("Test: Get Distinct ID");
+        const distinctId = NativeScriptMixpanel.getDistinctId();
+        console.log(`Test: Distinct ID: ${distinctId}`);
+    }
+
     public onAliasPress(): void {
         console.log("Test: Alias");
         NativeScriptMixpanel.alias("test alias");
