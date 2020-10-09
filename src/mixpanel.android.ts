@@ -1,5 +1,6 @@
 import { android } from "@nativescript/core/application/application";
 
+import { logger, NativeScriptMixpanelLogger, useLogger } from "./logger";
 import { JSONObject, LOGGING } from "./mixpanel.common";
 
 /**
@@ -47,7 +48,7 @@ export class NativeScriptMixpanel {
     if (this._mixpanel) {
       return this._mixpanel;
     }
-    console.error(LOGGING.CALLED_WITHOUT_INSTANCE);
+    logger.error(LOGGING.TAG, LOGGING.CALLED_WITHOUT_INSTANCE);
     throw new Error(LOGGING.CALLED_WITHOUT_INSTANCE);
   }
 
@@ -70,7 +71,7 @@ export class NativeScriptMixpanel {
     // Ensure Mixpanel loads.
     // tslint:disable-next-line: strict-type-predicates triple-equals
     if (mixpanel == undefined || mixpanelApi == undefined) {
-      console.error(LOGGING.INIT_FAILURE);
+      logger.error(LOGGING.TAG, LOGGING.INIT_FAILURE);
       initFailed = true;
     }
 
@@ -78,7 +79,7 @@ export class NativeScriptMixpanel {
     // Ensure the context is valid.
     // tslint:disable-next-line: triple-equals
     if (context == undefined) {
-      console.error(LOGGING.CONTEXT_FAILURE);
+      logger.error(LOGGING.TAG, LOGGING.CONTEXT_FAILURE);
       initFailed = true;
     }
 
@@ -86,6 +87,19 @@ export class NativeScriptMixpanel {
     if (!initFailed) {
       this.mixpanel = mixpanelApi.getInstance(context, token);
     }
+  }
+
+  /**
+   * Replace the default console logger with a custom logger binding.
+   *
+   * If you intend to use a custom logger or bound logger, this should
+   * be called before `init` to correctly output any errors.
+   *
+   * @param providedLogger
+   */
+  public static useLogger(providedLogger: NativeScriptMixpanelLogger): void {
+    useLogger(providedLogger);
+    logger.info(LOGGING.TAG, LOGGING.CUSTOM_LOGGER);
   }
 
   /**
@@ -288,7 +302,7 @@ export class NativeScriptMixpanel {
     try {
       return com.mixpanel || Mixpanel;
     } catch (error) {
-      console.log(`${LOGGING.NATIVE_CAPTURE_FAILURE}`);
+      logger.error(LOGGING.TAG, LOGGING.NATIVE_CAPTURE_FAILURE);
     }
     return undefined;
   }
@@ -301,7 +315,7 @@ export class NativeScriptMixpanelPeople {
     if (this._people) {
       return this._people;
     }
-    console.error(LOGGING.PEOPLE_UNDEFINED_INSTANCE);
+    logger.error(LOGGING.TAG, LOGGING.PEOPLE_UNDEFINED_INSTANCE);
     throw new Error(LOGGING.PEOPLE_UNDEFINED_INSTANCE);
   }
 

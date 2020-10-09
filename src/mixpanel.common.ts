@@ -6,11 +6,12 @@ export type JSONObject =
   | JSONArray;
 export interface JSONArray extends Array<JSONObject> {}
 
-const MIXPANEL: string = "Mixpanel:";
 export const LOGGING = {
-  CALLED_WITHOUT_INSTANCE: `${MIXPANEL} No instance found. Did you call 'getInstance'?`,
-  CONTEXT_FAILURE: `${MIXPANEL} Failed to get context.`,
-  INIT_FAILURE: `${MIXPANEL} Native library failed to load.`,
-  NATIVE_CAPTURE_FAILURE: `${MIXPANEL} Unable to capture native mixpanel instance.`,
-  PEOPLE_UNDEFINED_INSTANCE: `${MIXPANEL} No instance found.`,
+  TAG: "Mixpanel",
+  CALLED_WITHOUT_INSTANCE: "No instance found. Did you call 'getInstance'?",
+  CONTEXT_FAILURE: "Failed to get context.",
+  CUSTOM_LOGGER: "Now using provided logger.",
+  INIT_FAILURE: "Native library failed to load.",
+  NATIVE_CAPTURE_FAILURE: "Unable to capture native mixpanel instance.",
+  PEOPLE_UNDEFINED_INSTANCE: "No instance found.",
 };

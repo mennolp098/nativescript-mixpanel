@@ -1,3 +1,4 @@
+import { logger, NativeScriptMixpanelLogger, useLogger } from "./logger";
 import { JSONObject, LOGGING } from "./mixpanel.common";
 
 /**
@@ -53,7 +54,7 @@ export class NativeScriptMixpanel {
     if (this._mixpanel) {
       return this._mixpanel;
     }
-    console.error(LOGGING.CALLED_WITHOUT_INSTANCE);
+    logger.error(LOGGING.TAG, LOGGING.CALLED_WITHOUT_INSTANCE);
     throw new Error(LOGGING.CALLED_WITHOUT_INSTANCE);
   }
 
@@ -61,17 +62,35 @@ export class NativeScriptMixpanel {
     this._mixpanel = mixpanelInstance;
   }
 
+  /**
+   * Get the instance of MixpanelAPI associated with your Mixpanel project token.
+   *
+   * @param token
+   */
   public static init(token: string): void {
     const mixpanel: any = this.getNativeInstance();
 
     // Ensure Mixpanel loads.
     // tslint:disable-next-line: triple-equals
     if (mixpanel == undefined) {
-      console.error(LOGGING.INIT_FAILURE);
+      logger.error(LOGGING.TAG, LOGGING.INIT_FAILURE);
     }
 
     mixpanel.sharedInstanceWithToken(token);
     this.mixpanel = mixpanel.sharedInstance();
+  }
+
+  /**
+   * Replace the default console logger with a custom logger binding.
+   *
+   * If you intend to use a custom logger or bound logger, this should
+   * be called before `init` to correctly output any errors.
+   *
+   * @param providedLogger
+   */
+  public static useLogger(providedLogger: NativeScriptMixpanelLogger): void {
+    useLogger(providedLogger);
+    logger.info(LOGGING.TAG, LOGGING.CUSTOM_LOGGER);
   }
 
   /**
@@ -228,7 +247,7 @@ export class NativeScriptMixpanel {
     try {
       return Mixpanel;
     } catch (error) {
-      console.log(`${LOGGING.NATIVE_CAPTURE_FAILURE}`);
+      logger.error(LOGGING.TAG, LOGGING.NATIVE_CAPTURE_FAILURE);
     }
     return undefined;
   }
@@ -241,7 +260,7 @@ export class NativeScriptMixpanelPeople {
     if (this._people) {
       return this._people;
     }
-    console.error(LOGGING.PEOPLE_UNDEFINED_INSTANCE);
+    logger.error(LOGGING.TAG, LOGGING.PEOPLE_UNDEFINED_INSTANCE);
     throw new Error(LOGGING.PEOPLE_UNDEFINED_INSTANCE);
   }
 
