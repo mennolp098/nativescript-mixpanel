@@ -1,4 +1,8 @@
+import { NativeScriptMixpanelLogger } from "./logger";
 import { JSONObject } from "./mixpanel.common";
+
+export { NativeScriptMixpanelLogger } from "./logger";
+export { JSONObject } from "./mixpanel.common";
 
 export declare class NativeScriptMixpanel {
   /**
@@ -7,6 +11,16 @@ export declare class NativeScriptMixpanel {
    * @param token
    */
   public static init(token: string): void;
+
+  /**
+   * Replace the default console logger with a custom logger binding.
+   *
+   * If you intend to use a custom logger or bound logger, this should
+   * be called before `init` to correctly output any errors.
+   *
+   * @param providedLogger a new logger or object that binds a logger.
+   */
+  public static useLogger(providedLogger: NativeScriptMixpanelLogger): void;
 
   /**
    * Associate all future calls to track(string, JSON) with the user identified by the

@@ -11,7 +11,7 @@
     "interface-over-type-literal": true,
     "max-classes-per-file": false,
     "max-line-length": false,
-    "no-console": [true, "debug", "time", "timeEnd"],
+    "no-console": true,
     "no-default-export": true,
     "no-duplicate-imports": true,
     "no-floating-promises": true,
