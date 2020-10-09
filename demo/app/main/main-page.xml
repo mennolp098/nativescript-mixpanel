@@ -5,7 +5,7 @@
       <ActionBar title="Mixpanel plugin demo"/>
   </Page.actionBar>
   <ScrollView orientation="vertical">
-    <GridLayout rows="auto, 15, auto, 15, auto, 15, auto, 15, auto, 15, auto, *">
+    <GridLayout rows="auto, 15, auto, 15, auto, 15, auto, 15, auto, 15, auto, 15, auto, *">
       <Label row="0" text="{{'Using token: ' + token}}" class="t-10 text-center" style="color: green;" visibility="{{ token !== '' ? 'visible' : 'collapsed' }}" textWrap="true"/>
       <Label row="0" text="No token has been set, please set token in constants.ts" class="t-10 font-weight-bold text-center" style="color: red;" visibility="{{ token === '' ? 'visible' : 'collapsed' }}" textWrap="true"/>
 
@@ -42,6 +42,11 @@
         <Button row="2" text="Opt In to Tracking" tap="{{ onOptInPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
         <Button row="3" text="Flush" tap="{{ onFlushPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
         <Button row="4" text="Reset" tap="{{ onResetPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
+      </GridLayout>
+
+      <GridLayout row="12" rows="auto, auto">
+        <Label row="0" text="Logger" class="h3 text-center" textWrap="true"/>
+        <Button row="1" text="Use Custom Logger" tap="{{ onUserCustomLoggerPress }}" isEnabled="{{ testsEnabled }}" class="-outline -rounded-sm"></Button>
       </GridLayout>
     </GridLayout>
   </ScrollView>

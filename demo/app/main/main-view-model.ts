@@ -1,11 +1,15 @@
 import { Observable } from "@nativescript/core/data/observable/observable";
 import { setTimeout } from "@nativescript/core/timer";
 import {
+    JSONObject,
     NativeScriptMixpanel,
+    NativeScriptMixpanelLogger,
     NativeScriptMixpanelPeople,
 } from "@nstudio/nativescript-mixpanel";
 
 import { MIXPANEL_TOKEN } from "~/constants";
+
+/* tslint:disable:no-console */
 
 export class MainModel extends Observable {
     public token: string = MIXPANEL_TOKEN;
@@ -13,7 +17,7 @@ export class MainModel extends Observable {
 
     private people?: NativeScriptMixpanelPeople;
 
-    private readonly testProps = {
+    private readonly testProps: JSONObject = {
         "Test Type": "test value",
     };
 
@@ -71,9 +75,10 @@ export class MainModel extends Observable {
 
     public onTrackPress(): void {
         console.log("Test: Track");
-        NativeScriptMixpanel.track("test event", {
+        const testEventProps: JSONObject = {
             tracking: "this",
-        });
+        };
+        NativeScriptMixpanel.track("test event", testEventProps);
     }
 
     public async onTimeEventPress(): Promise<void> {
@@ -136,4 +141,21 @@ export class MainModel extends Observable {
         console.log("Test: Reset");
         NativeScriptMixpanel.reset();
     }
+
+    // Logger
+    public onUserCustomLoggerPress(): void {
+        console.log("Test: Use Custom Logger");
+        const formatMsg = (tag: string, msg: string) => `[Demo-${tag}]: ${msg}`;
+        const customLogger: NativeScriptMixpanelLogger = {
+            log: (tag: string, msg: string) => console.log(formatMsg(tag, msg)),
+            info: (tag: string, msg: string) =>
+                console.info(formatMsg(tag, msg)),
+            warn: (tag: string, msg: string) =>
+                console.warn(formatMsg(tag, msg)),
+            error: (tag: string, msg: string) =>
+                console.error(formatMsg(tag, msg)),
+        };
+        NativeScriptMixpanel.useLogger(customLogger);
+    }
 }
+/* tslint:enable:no-console */
