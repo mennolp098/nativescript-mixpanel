@@ -1,8 +1,8 @@
-import { LOGGING, MixpanelPeopleCommon } from "./mixpanel.common";
+import { JSONObject, LOGGING } from "./mixpanel.common";
 
-type JSON = null | string | number | { [key: string]: JSON } | JSONArray;
-interface JSONArray extends Array<JSON> {}
-
+/**
+ * Typed interface representing the native instance of Mixpanel.
+ */
 interface MixpanelIos {
   /**
    * A distinct ID is a string that uniquely identifies one of your users.
@@ -12,7 +12,7 @@ interface MixpanelIos {
    * random UUIDString. To change the current distinct ID, use the identify method.
    */
   distinctId: string;
-  people: MixpanelPeopleCommon;
+  people: MixpanelPeopleIos;
 
   // Identity
   identify: (distinctId: string) => void;
@@ -29,13 +29,21 @@ interface MixpanelIos {
   timeEvent: (eventName: string) => void;
 
   // People
-  getPeople: () => MixpanelPeopleCommon;
+  getPeople: () => MixpanelPeopleIos;
 
   // Other
   optInTracking: () => void;
   optOutTracking: () => void;
   flush: () => void;
   reset: () => void;
+}
+
+/**
+ * Typed interface representing the native instance of Mixpanel.
+ */
+interface MixpanelPeopleIos {
+  identify: (distinctId: string) => void;
+  set: (properties: NSDictionary<any, any>) => void;
 }
 
 export class NativeScriptMixpanel {
@@ -108,7 +116,7 @@ export class NativeScriptMixpanel {
    *
    * @param properties properties dictionary
    */
-  public static registerSuperProperties(properties: JSON): void {
+  public static registerSuperProperties(properties: JSONObject): void {
     const iosProps = NSDictionary.dictionaryWithDictionary(properties as any);
     this.mixpanel.registerSuperProperties(iosProps);
   }
@@ -142,7 +150,7 @@ export class NativeScriptMixpanel {
    * @param event event name
    * @param properties properties JSON
    */
-  public static track(event: string, properties?: JSON): void {
+  public static track(event: string, properties?: JSONObject): void {
     if (properties) {
       const iosProps = NSDictionary.dictionaryWithDictionary<any, any>(
         properties as any
@@ -227,9 +235,9 @@ export class NativeScriptMixpanel {
 }
 
 export class NativeScriptMixpanelPeople {
-  private _people?: MixpanelPeopleCommon;
+  private _people?: MixpanelPeopleIos;
 
-  private get people(): MixpanelPeopleCommon {
+  private get people(): MixpanelPeopleIos {
     if (this._people) {
       return this._people;
     }
@@ -237,7 +245,7 @@ export class NativeScriptMixpanelPeople {
     throw new Error(LOGGING.PEOPLE_UNDEFINED_INSTANCE);
   }
 
-  private set people(peopleInstance: MixpanelPeopleCommon) {
+  private set people(peopleInstance: MixpanelPeopleIos) {
     this._people = peopleInstance;
   }
 
@@ -272,7 +280,7 @@ export class NativeScriptMixpanelPeople {
    *
    * @param properties properties JSON
    */
-  public set(properties: JSON): void {
+  public set(properties: JSONObject): void {
     const iosProps = NSDictionary.dictionaryWithDictionary<any, any>(
       properties as any
     );

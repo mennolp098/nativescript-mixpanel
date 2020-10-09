@@ -1,14 +1,10 @@
-export type JSON = null | string | number | { [key: string]: JSON } | JSONArray;
-export interface JSONArray extends Array<JSON> {}
-
-export interface MixpanelCommon {
-  identify: (identity: string) => void;
-}
-
-export interface MixpanelPeopleCommon {
-  identify: (distinctId: string) => void;
-  set: (properties: org.json.JSONObject | NSDictionary<any, any>) => void;
-}
+export type JSONObject =
+  | null
+  | string
+  | number
+  | { [key: string]: JSONObject }
+  | JSONArray;
+export interface JSONArray extends Array<JSONObject> {}
 
 const MIXPANEL: string = "Mixpanel:";
 export const LOGGING = {
