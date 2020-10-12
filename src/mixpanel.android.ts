@@ -1,18 +1,12 @@
 import { android } from "@nativescript/core/application/application";
 
-import {
-  LOGGING,
-  MixpanelCommon,
-  MixpanelPeopleCommon,
-} from "./mixpanel.common";
-
-type JSON = null | string | number | { [key: string]: JSON } | JSONArray;
-interface JSONArray extends Array<JSON> {}
+import { logger, NativeScriptMixpanelLogger, useLogger } from "./logger";
+import { JSONObject, LOGGING } from "./mixpanel.common";
 
 /**
  * Typed interface representing the native instance of Mixpanel.
  */
-interface MixpanelAndroid extends MixpanelCommon {
+interface MixpanelAndroid {
   getDistinctId: () => string;
   getInstance: (context: any, token: string) => MixpanelAndroid;
 
@@ -30,13 +24,21 @@ interface MixpanelAndroid extends MixpanelCommon {
   timeEvent: (eventName: string) => void;
 
   // People
-  getPeople: () => MixpanelPeopleCommon;
+  getPeople: () => MixpanelPeopleAndroid;
 
   // Other
   optInTracking: () => void;
   optOutTracking: () => void;
   flush: () => void;
   reset: () => void;
+}
+
+/**
+ * Typed interface representing the native instance of MixpanelPeople.
+ */
+interface MixpanelPeopleAndroid {
+  identify: (distinctId: string) => void;
+  set: (properties: org.json.JSONObject) => void;
 }
 
 export class NativeScriptMixpanel {
@@ -46,7 +48,7 @@ export class NativeScriptMixpanel {
     if (this._mixpanel) {
       return this._mixpanel;
     }
-    console.error(LOGGING.CALLED_WITHOUT_INSTANCE);
+    logger.error(LOGGING.TAG, LOGGING.CALLED_WITHOUT_INSTANCE);
     throw new Error(LOGGING.CALLED_WITHOUT_INSTANCE);
   }
 
@@ -69,7 +71,7 @@ export class NativeScriptMixpanel {
     // Ensure Mixpanel loads.
     // tslint:disable-next-line: strict-type-predicates triple-equals
     if (mixpanel == undefined || mixpanelApi == undefined) {
-      console.error(LOGGING.INIT_FAILURE);
+      logger.error(LOGGING.TAG, LOGGING.INIT_FAILURE);
       initFailed = true;
     }
 
@@ -77,7 +79,7 @@ export class NativeScriptMixpanel {
     // Ensure the context is valid.
     // tslint:disable-next-line: triple-equals
     if (context == undefined) {
-      console.error(LOGGING.CONTEXT_FAILURE);
+      logger.error(LOGGING.TAG, LOGGING.CONTEXT_FAILURE);
       initFailed = true;
     }
 
@@ -85,6 +87,19 @@ export class NativeScriptMixpanel {
     if (!initFailed) {
       this.mixpanel = mixpanelApi.getInstance(context, token);
     }
+  }
+
+  /**
+   * Replace the default console logger with a custom logger binding.
+   *
+   * If you intend to use a custom logger or bound logger, this should
+   * be called before `init` to correctly output any errors.
+   *
+   * @param providedLogger
+   */
+  public static useLogger(providedLogger: NativeScriptMixpanelLogger): void {
+    useLogger(providedLogger);
+    logger.info(LOGGING.TAG, LOGGING.CUSTOM_LOGGER);
   }
 
   /**
@@ -158,7 +173,7 @@ export class NativeScriptMixpanel {
    *
    * @param properties A JSON containing super properties to register
    */
-  public static registerSuperProperties(properties: JSON): void {
+  public static registerSuperProperties(properties: JSONObject): void {
     const androidProps = new org.json.JSONObject(JSON.stringify(properties));
     this.mixpanel.registerSuperProperties(androidProps);
   }
@@ -202,7 +217,7 @@ export class NativeScriptMixpanel {
    * @param properties A JSON containing the key value pairs of the properties
    * to include in this event.
    */
-  public static track(eventName: string, properties?: JSON): void {
+  public static track(eventName: string, properties?: JSONObject): void {
     if (properties) {
       const androidProps = new org.json.JSONObject(JSON.stringify(properties));
       this.mixpanel.track(eventName, androidProps);
@@ -287,24 +302,24 @@ export class NativeScriptMixpanel {
     try {
       return com.mixpanel || Mixpanel;
     } catch (error) {
-      console.log(`${LOGGING.NATIVE_CAPTURE_FAILURE}`);
+      logger.error(LOGGING.TAG, LOGGING.NATIVE_CAPTURE_FAILURE);
     }
     return undefined;
   }
 }
 
 export class NativeScriptMixpanelPeople {
-  private _people?: MixpanelPeopleCommon;
+  private _people?: MixpanelPeopleAndroid;
 
-  private get people(): MixpanelPeopleCommon {
+  private get people(): MixpanelPeopleAndroid {
     if (this._people) {
       return this._people;
     }
-    console.error(LOGGING.PEOPLE_UNDEFINED_INSTANCE);
+    logger.error(LOGGING.TAG, LOGGING.PEOPLE_UNDEFINED_INSTANCE);
     throw new Error(LOGGING.PEOPLE_UNDEFINED_INSTANCE);
   }
 
-  private set people(peopleInstance: MixpanelPeopleCommon) {
+  private set people(peopleInstance: MixpanelPeopleAndroid) {
     this._people = peopleInstance;
   }
 
@@ -340,7 +355,7 @@ export class NativeScriptMixpanelPeople {
    * be associated with a property name, and the value of that key will be
    * assigned to the property.
    */
-  public set(properties: JSON): void {
+  public set(properties: JSONObject): void {
     const androidProps = new org.json.JSONObject(JSON.stringify(properties));
     this.people.set(androidProps);
   }

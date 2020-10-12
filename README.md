@@ -14,7 +14,7 @@ From your command prompt/terminal go to your application's root folder and execu
 
 # Usage
 
-## Angular Example
+## Example
 
 This can be initialised at various points in your application, i.e. in a service. However it is recommended to initialise this in your `main.ts` file.
 
@@ -47,6 +47,23 @@ NativeScriptMixpanel.identify(someId);
 NativeScriptMixpanel.getPeople().identify(someId);
 ```
 
+### Custom Logging / Logger Binding
+
+If you need to pipe/funnel log output (i.e. for errors) to your own applications logger
+implementation, you can provide a binding to your logger through a simple object.
+
+**If you use this it is recommended to call `useLogger` before you `init`.**
+
+```typescript
+const customLogger: NativeScriptMixpanelLogger = {
+  log: (tag: string, msg: string) => someOtherLogger.log(tag, msg),
+  info: (tag: string, msg: string) => someOtherLogger.info(tag, msg),
+  warn: (tag: string, msg: string) => someOtherLogger.warn(tag, msg),
+  error: (tag: string, msg: string) => someOtherLogger.error(tag, msg),
+};
+NativeScriptMixpanel.useLogger(customLogger);
+```
+
 ## API
 
 ### NativeScriptMixpanel
@@ -61,6 +78,27 @@ Get the instance of MixpanelAPI associated with your Mixpanel project token.
 
 ```typescript
 NativeScriptMixpanel.init("token");
+```
+
+#### **`useLogger(providedLogger: NativeScriptMixpanelLogger): void`**
+
+Replace the default console logger with a custom logger binding.
+
+If you intend to use a custom logger or bound logger, this should
+be called before `init` to correctly output any errors.
+
+| Parameter      | Type                       | Description                                |
+| -------------- | -------------------------- | ------------------------------------------ |
+| providedLogger | NativeScriptMixpanelLogger | A new logger or object that binds a logger |
+
+```typescript
+const customLogger: NativeScriptMixpanelLogger = {
+  log: (tag: string, msg: string) => someOtherLogger.log(tag, msg),
+  info: (tag: string, msg: string) => someOtherLogger.info(tag, msg),
+  warn: (tag: string, msg: string) => someOtherLogger.warn(tag, msg),
+  error: (tag: string, msg: string) => someOtherLogger.error(tag, msg),
+};
+NativeScriptMixpanel.useLogger(customLogger);
 ```
 
 #### **`identify(distinctId: string): void`**

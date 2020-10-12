@@ -1,8 +1,9 @@
-import { LOGGING, MixpanelPeopleCommon } from "./mixpanel.common";
+import { logger, NativeScriptMixpanelLogger, useLogger } from "./logger";
+import { JSONObject, LOGGING } from "./mixpanel.common";
 
-type JSON = null | string | number | { [key: string]: JSON } | JSONArray;
-interface JSONArray extends Array<JSON> {}
-
+/**
+ * Typed interface representing the native instance of Mixpanel.
+ */
 interface MixpanelIos {
   /**
    * A distinct ID is a string that uniquely identifies one of your users.
@@ -12,7 +13,7 @@ interface MixpanelIos {
    * random UUIDString. To change the current distinct ID, use the identify method.
    */
   distinctId: string;
-  people: MixpanelPeopleCommon;
+  people: MixpanelPeopleIos;
 
   // Identity
   identify: (distinctId: string) => void;
@@ -29,13 +30,21 @@ interface MixpanelIos {
   timeEvent: (eventName: string) => void;
 
   // People
-  getPeople: () => MixpanelPeopleCommon;
+  getPeople: () => MixpanelPeopleIos;
 
   // Other
   optInTracking: () => void;
   optOutTracking: () => void;
   flush: () => void;
   reset: () => void;
+}
+
+/**
+ * Typed interface representing the native instance of Mixpanel.
+ */
+interface MixpanelPeopleIos {
+  identify: (distinctId: string) => void;
+  set: (properties: NSDictionary<any, any>) => void;
 }
 
 export class NativeScriptMixpanel {
@@ -45,7 +54,7 @@ export class NativeScriptMixpanel {
     if (this._mixpanel) {
       return this._mixpanel;
     }
-    console.error(LOGGING.CALLED_WITHOUT_INSTANCE);
+    logger.error(LOGGING.TAG, LOGGING.CALLED_WITHOUT_INSTANCE);
     throw new Error(LOGGING.CALLED_WITHOUT_INSTANCE);
   }
 
@@ -53,17 +62,35 @@ export class NativeScriptMixpanel {
     this._mixpanel = mixpanelInstance;
   }
 
+  /**
+   * Get the instance of MixpanelAPI associated with your Mixpanel project token.
+   *
+   * @param token
+   */
   public static init(token: string): void {
     const mixpanel: any = this.getNativeInstance();
 
     // Ensure Mixpanel loads.
     // tslint:disable-next-line: triple-equals
     if (mixpanel == undefined) {
-      console.error(LOGGING.INIT_FAILURE);
+      logger.error(LOGGING.TAG, LOGGING.INIT_FAILURE);
     }
 
     mixpanel.sharedInstanceWithToken(token);
     this.mixpanel = mixpanel.sharedInstance();
+  }
+
+  /**
+   * Replace the default console logger with a custom logger binding.
+   *
+   * If you intend to use a custom logger or bound logger, this should
+   * be called before `init` to correctly output any errors.
+   *
+   * @param providedLogger
+   */
+  public static useLogger(providedLogger: NativeScriptMixpanelLogger): void {
+    useLogger(providedLogger);
+    logger.info(LOGGING.TAG, LOGGING.CUSTOM_LOGGER);
   }
 
   /**
@@ -108,7 +135,7 @@ export class NativeScriptMixpanel {
    *
    * @param properties properties dictionary
    */
-  public static registerSuperProperties(properties: JSON): void {
+  public static registerSuperProperties(properties: JSONObject): void {
     const iosProps = NSDictionary.dictionaryWithDictionary(properties as any);
     this.mixpanel.registerSuperProperties(iosProps);
   }
@@ -142,7 +169,7 @@ export class NativeScriptMixpanel {
    * @param event event name
    * @param properties properties JSON
    */
-  public static track(event: string, properties?: JSON): void {
+  public static track(event: string, properties?: JSONObject): void {
     if (properties) {
       const iosProps = NSDictionary.dictionaryWithDictionary<any, any>(
         properties as any
@@ -220,24 +247,24 @@ export class NativeScriptMixpanel {
     try {
       return Mixpanel;
     } catch (error) {
-      console.log(`${LOGGING.NATIVE_CAPTURE_FAILURE}`);
+      logger.error(LOGGING.TAG, LOGGING.NATIVE_CAPTURE_FAILURE);
     }
     return undefined;
   }
 }
 
 export class NativeScriptMixpanelPeople {
-  private _people?: MixpanelPeopleCommon;
+  private _people?: MixpanelPeopleIos;
 
-  private get people(): MixpanelPeopleCommon {
+  private get people(): MixpanelPeopleIos {
     if (this._people) {
       return this._people;
     }
-    console.error(LOGGING.PEOPLE_UNDEFINED_INSTANCE);
+    logger.error(LOGGING.TAG, LOGGING.PEOPLE_UNDEFINED_INSTANCE);
     throw new Error(LOGGING.PEOPLE_UNDEFINED_INSTANCE);
   }
 
-  private set people(peopleInstance: MixpanelPeopleCommon) {
+  private set people(peopleInstance: MixpanelPeopleIos) {
     this._people = peopleInstance;
   }
 
@@ -272,7 +299,7 @@ export class NativeScriptMixpanelPeople {
    *
    * @param properties properties JSON
    */
-  public set(properties: JSON): void {
+  public set(properties: JSONObject): void {
     const iosProps = NSDictionary.dictionaryWithDictionary<any, any>(
       properties as any
     );
