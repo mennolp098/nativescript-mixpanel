@@ -1,6 +1,6 @@
 {
   "name": "@nstudio/nativescript-mixpanel",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A NativeScript plugin for Mixpanel tracking",
   "main": "mixpanel",
   "typings": "index.d.ts",
