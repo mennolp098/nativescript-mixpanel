@@ -11,10 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Set Node.js 10.x
+      - name: Set Node.js 12.x
         uses: actions/setup-node@v1
         with:
-          node-version: "10.x"
+          node-version: "12.x"
 
       - name: Build Plugin Source
         run: cd src && npm i && npx tsc
@@ -32,18 +32,18 @@ jobs:
       - name: Setup NativeScript CLI
         run: |
           echo no | npm i -g nativescript
-          tns usage-reporting disable
-          tns error-reporting disable
+          ns usage-reporting disable
+          ns error-reporting disable
 
       - name: Build Android Demo App
         run: |
           cd demo
-          tns build android --env.uglify --force
+          ns build android --env.uglify
 
       - name: Build iOS Demo App
         run: |
           cd demo
-          tns build ios --env.uglify --force
+          ns build ios --env.uglify
 
       - name: Lint
         run: cd src && npm run ci.lint

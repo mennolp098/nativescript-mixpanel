@@ -1,4 +1,4 @@
-import { android } from "@nativescript/core/application/application";
+import { Application } from "@nativescript/core";
 
 import { logger, NativeScriptMixpanelLogger, useLogger } from "./logger";
 import { JSONObject, LOGGING } from "./mixpanel.common";
@@ -75,7 +75,7 @@ export class NativeScriptMixpanel {
       initFailed = true;
     }
 
-    const context: any = android.context;
+    const context: any = Application.android.context;
     // Ensure the context is valid.
     // tslint:disable-next-line: triple-equals
     if (context == undefined) {
