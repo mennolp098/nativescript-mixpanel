@@ -1,4 +1,4 @@
-import { Observable } from "@nativescript/core/data/observable/observable";
+import { Observable } from "@nativescript/core";
 import { setTimeout } from "@nativescript/core/timer";
 import {
     JSONObject,

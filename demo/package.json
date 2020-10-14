@@ -1,26 +1,17 @@
 {
-  "nativescript": {
-    "id": "org.nativescript.demo",
-    "tns-android": {
-      "version": "6.5.3"
-    },
-    "tns-ios": {
-      "version": "6.5.3"
-    }
-  },
   "description": "NativeScript Application",
   "license": "Apache-2.0",
+  "main": "app.js",
   "dependencies": {
-    "@nativescript/core": "~6.5.20",
-    "@nativescript/theme": "~2.3.0",
+    "@nativescript/core": "~7.0.11",
+    "@nativescript/theme": "~3.0.0",
     "@nstudio/nativescript-mixpanel": "file:../src",
-    "tns-core-modules": "~6.5.20"
+    "@nativescript/webpack": "~3.0.7"
   },
   "devDependencies": {
-    "nativescript-dev-webpack": "~1.5.0",
+    "@nativescript/android": "7.0.0",
+    "@nativescript/ios": "7.0.1",
     "prettier": "^2.1.2",
-    "tns-android": "6.5.3",
-    "tns-ios": "6.5.3",
-    "typescript": "~3.5.3"
+    "typescript": "~3.9.7"
   }
 }
