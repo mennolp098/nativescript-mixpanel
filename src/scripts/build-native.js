@@ -1,32 +1,24 @@
-const { exec } = require('child_process');
-const semver = require('semver');
+const { execSync } = require("child_process");
+const semver = require("semver");
 
-exec('tns --version', (err, stdout, stderr) => {
-    if (err) {
-        // node couldn't execute the command
-        console.log(`tns --version err: ${err}`);
-        return;
-    }
+let nsMajorVersion;
+try {
+  const nsVersion = execSync("ns --version").toString().trim();
 
-    // In case the current Node.js version is not supported by CLI, a warning in `tns --version` output is shown.
-    // Sample output:
-    //
-    /*Support for Node.js ^8.0.0 is deprecated and will be removed in one of the next releases of NativeScript. Please, upgrade to the latest Node.js LTS version.
+  const nsVersionMatches = nsVersion.match(/^(?:\d+\.){2}\d+.*?$/m);
+  nsMajorVersion = semver.major((nsVersionMatches || [])[0]);
+} catch (error) {
+  console.error(`Execution failed: ns --version error: ${error}`);
+  return;
+}
 
-    6.0.0
-    */
-    // Extract the actual version (6.0.0) from it.
-    const tnsVersion = semver.major((stdout.match(/^(?:\d+\.){2}\d+.*?$/m) || [])[0]);
-
-    // execute 'tns plugin build' for {N} version > 4. This command builds .aar in platforms/android folder.
-    if (tnsVersion >= 4) {
-        console.log(`executing 'tns plugin build'`);
-        exec('tns plugin build', (err, stdout, stderr) => {
-            if (err) {
-                // node couldn't execute the command
-                console.log(`${err}`);
-                return;
-            }
-        });
-    }
-});
+// execute 'ns plugin build' for {N} version >= 7. This command builds .aar in platforms/android folder.
+if (nsMajorVersion >= 7) {
+  console.info(`executing 'ns plugin build'`);
+  try {
+    execSync("ns plugin build");
+  } catch (error) {
+    // Failed to execute the command.
+    console.error(`Execution failed: ns plugin build: ${error}`);
+  }
+}

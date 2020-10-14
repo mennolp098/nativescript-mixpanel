@@ -1,7 +1,7 @@
 # NativeScript Mixpanel
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/nstudio/nativescript-mixpanel/Build%20CI?style=flat-square)](https://github.com/nstudio/nativescript-mixpanel/actions?workflow=Build+CI)
-[![npm](https://img.shields.io/badge/nativescript-6.5-blue?style=flat-square)](https://nativescript.org/)
+[![npm](https://img.shields.io/badge/nativescript-7-blue?style=flat-square)](https://nativescript.org/)
 [![npm](https://img.shields.io/npm/v/@nstudio/nativescript-mixpanel?style=flat-square)](https://www.npmjs.com/package/@nstudio/nativescript-mixpanel)
 [![npm](https://img.shields.io/npm/dt/@nstudio/nativescript-mixpanel?style=flat-square)](https://www.npmjs.com/package/@nstudio/nativescript-mixpanel)
 
@@ -11,7 +11,11 @@
 
 From your command prompt/terminal go to your application's root folder and execute:
 
-`tns plugin add @nstudio/nativescript-mixpanel`
+`ns plugin add @nstudio/nativescript-mixpanel`
+
+### NativeScript 6.5
+
+`tns plugin add @nstudio/nativescript-mixpanel@2.1.0`
 
 # Usage
 

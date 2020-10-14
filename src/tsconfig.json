@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
+    "target": "es2017",
+    "module": "esnext",
+    "moduleResolution": "node",
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es6", "dom"],
+    "lib": ["es2017", "es6", "dom"],
     "noEmitHelpers": true,
     "noEmitOnError": false,
     "noFallthroughCasesInSwitch": true,
@@ -16,7 +17,7 @@
     "noImplicitUseStrict": false,
     "noLib": false,
     "pretty": false,
-    "removeComments": true,
+    "removeComments": false,
     "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": true
