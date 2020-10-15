@@ -2,3 +2,6 @@
 *.ts
 !*.d.ts
 tsconfig.json
+scripts/build-native.js
+references.d.ts
+.prettierignore
