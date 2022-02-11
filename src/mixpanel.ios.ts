@@ -244,6 +244,7 @@ export class NativeScriptMixpanel {
    * Attempt to capture the native instance of Mixpanel.
    */
   private static getNativeInstance(): any {
+    console.log("Getting native instance IOS");
     try {
       return Mixpanel;
     } catch (error) {

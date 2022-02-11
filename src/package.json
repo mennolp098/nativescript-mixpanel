@@ -8,6 +8,12 @@
     "type": "git",
     "url": "https://github.com/nstudio/nativescript-mixpanel.git"
   },
+  "nativescript": {
+    "platforms": {
+      "android": "4.0.0",
+      "ios": "4.0.0"
+    }
+  },
   "scripts": {
     "tsc": "tsc",
     "build": "npm run tsc && npm run build.native",
