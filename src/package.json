@@ -10,8 +10,8 @@
   },
   "nativescript": {
     "platforms": {
-      "android": "4.0.0",
-      "ios": "4.0.0"
+      "android": "8.1.5",
+      "ios": "8.1.5"
     }
   },
   "scripts": {
